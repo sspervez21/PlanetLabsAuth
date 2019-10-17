@@ -1,0 +1,203 @@
+consumes:
+- application/json
+info:
+  description: PlantLabs Auth Service
+  title: PlanetAuth
+  version: 0.1.0
+produces:
+- application/json
+schemes:
+- http
+swagger: "2.0"
+paths:
+  /users:
+    post:
+      operationId: "CreateUser"
+      parameters:
+        - in: body
+          name: CreateUserInput
+          required: true
+          schema:
+            $ref: "#/definitions/UserRecord"
+      responses:  
+        200:
+          description: "OK"
+        409:
+          description: "User already exists"
+          schema:
+            $ref: "#/definitions/BadRequest"
+  /users/{userId}:
+    get:
+      operationId: "GetUser"
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          type: string
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/UserRecord"
+        404:
+          description: "User not found"
+          schema:
+            $ref: "#/definitions/BadRequest"
+    put:
+      operationId: "UpdateUser"
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          type: string
+        - in: body
+          name: UpdateUserInput
+          required: true
+          schema:
+            $ref: "#/definitions/UserRecord"
+      responses:  
+        200:
+          description: "OK"
+        404:
+          description: "User does not exists"
+          schema:
+            $ref: "#/definitions/BadRequest"
+    delete:
+      operationId: "DeleteUser"
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          type: string
+      responses:  
+        200:
+          description: "OK"
+        404:
+          description: "User does not exists"
+          schema:
+            $ref: "#/definitions/BadRequest"
+  /groups:
+    post:
+      operationId: "CreateGroup"
+      parameters:
+        - in: body
+          name: CreateGroupInput
+          required: true
+          schema:
+            $ref: "#/definitions/Group"
+      responses:  
+        200:
+          description: "OK"
+        409:
+          description: "Group already exists"
+          schema:
+            $ref: "#/definitions/BadRequest"
+  /groups/{groupName}:
+    get:
+      operationId: "GetGroup"
+      parameters:
+        - in: path
+          name: groupName
+          required: true
+          type: string
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: array
+            items:
+              type: string
+            minItems: 1
+        404:
+          description: "Group not found"
+          schema:
+            $ref: "#/definitions/BadRequest"
+    put:
+      operationId: "UpdateGroup"
+      parameters:
+        - in: path
+          name: groupName
+          required: true
+          type: string
+        - in: body
+          name: UpdateGroupInput
+          required: true
+          schema:
+            $ref: "#/definitions/GroupList"
+      responses:  
+        200:
+          description: "OK"
+        404:
+          description: "Group does not exists"
+          schema:
+            $ref: "#/definitions/BadRequest"
+    delete:
+      operationId: "DeleteGroup"
+      parameters:
+        - in: path
+          name: groupName
+          required: true
+          type: string
+      responses:  
+        200:
+          description: "OK"
+        404:
+          description: "Group does not exists"
+          schema:
+            $ref: "#/definitions/BadRequest"
+definitions:
+  NotFound:
+    type: object
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+    description: "Not Found object"
+  BadRequest:
+    type: object
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+    description: "Bad Request object"
+  UserRecord:
+    type: object
+    properties:
+      firstName: 
+        type: string
+      lastName:
+        type: string
+      userId:
+        type: string
+      groups:
+        type: array
+        items:
+          type: string
+        minItems: 1
+    description: "A User Record"
+    required:
+      - firstName
+      - lastName
+      - userId
+      - groups
+  Group:
+    type: object
+    properties:
+      name:
+        type: string
+    description: "A Group of Users"
+    required:
+      - name
+  GroupList:
+    type: object
+    properties:
+      list:
+        type: array
+        items:
+          type: string
+        minItems: 1
+    description: "A list of groups"
+    required:
+      - list

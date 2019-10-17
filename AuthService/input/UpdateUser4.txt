@@ -1,0 +1,6 @@
+{
+  "firstName" : "Joe2",
+  "lastName"  : "Smith2",
+  "userId"    : "jsmith2",
+  "groups"    : ["admins", "users"]
+}
